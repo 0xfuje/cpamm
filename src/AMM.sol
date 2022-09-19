@@ -88,8 +88,9 @@ contract AMM {
         if (totalShares == 0) {
             shares = _sqrt(_amountIn0 * _amountIn1);
         } else {
-            // s = dx / x * Ts =
-            // dy / y * Ts
+            // s = dx / x * Ts = dx = 
+            // s = dy / y * Ts = 
+            // dx * Ts / x
             // get whichever calc is less
             shares = _min(
                 (_amountIn0 * totalShares) / reserve0,

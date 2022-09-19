@@ -5,9 +5,10 @@ import "forge-std/Test.sol";
 import { AMM } from "../src/AMM.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-
 contract AMMTest is Test {
     AMM public amm;
+    uint256 mainnetFork;
+    string mainnetUrl;
 
     address alice = vm.addr(1);
     address bella = vm.addr(2);
@@ -19,12 +20,13 @@ contract AMMTest is Test {
     address constant DAI_ADDRESS = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
     function setUp() public {
+        mainnetUrl = vm.envString('MAINNET_URL');
+        mainnetFork = vm.createSelectFork(mainnetUrl);
 
         WETH = IERC20(WETH_ADDRESS);
         DAI = IERC20(DAI_ADDRESS);
         amm = new AMM(WETH_ADDRESS, DAI_ADDRESS);
 
-        deal(WETH_ADDRESS, alice, 1 * 1e18);
         deal(DAI_ADDRESS, alice, 2000 * 1e18);
         deal(WETH_ADDRESS, bella, 1 * 1e18);
         deal(DAI_ADDRESS, bella, 2000 * 1e18);
@@ -32,13 +34,18 @@ contract AMMTest is Test {
         deal(DAI_ADDRESS, whale, 200_000 * 1e18);
     }
 
-    function whaleDeposit() public {
-        vm.startPrank(whale);
-        WETH.approve(address(amm), 100 * 1e18);
-        DAI.approve(address(amm), 200_000 * 1e18);
+    function _addLiquidity(
+        address depositor,
+        uint256 weth_amount,
+        uint256 dai_amount
+    ) internal {
+        vm.startPrank(depositor);
+        WETH.approve(address(amm), weth_amount * 1e18);
+        DAI.approve(address(amm), dai_amount * 1e18);
         amm.addLiquidity(
-            100 * 1e18,
-            200_000 * 1e18
+            weth_amount * 1e18,
+            dai_amount * 1e18
         );
+        vm.stopPrank();
     }
 }
