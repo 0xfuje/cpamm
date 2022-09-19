@@ -2,8 +2,8 @@
 pragma solidity 0.8.13;
 
 import "forge-std/Test.sol";
-import { AMM } from "../src/AMM.sol";
+import { AMMTest } from "./AMMSetup.t.sol";
 
-contract AMMTest is Test {
-    
+contract AddLiquidityTest is AMMTest {
+
 }
