@@ -9,8 +9,8 @@ contract SwapTest is PairTest {
         PairTest._addLiquidity(whale, 100, 200_000);
 
         vm.startPrank(alice);
-        DAI.approve(address(amm), 2000 * 1e18);
-        amm.swap(address(DAI), 2000 * 1e18);
+        DAI.approve(address(pair), 2000 * 1e18);
+        pair.swap(address(DAI), 2000 * 1e18);
 
         assertGt(WETH.balanceOf(alice), 9 * 1e17); // greater than 0.9 WETH
         assertLt(WETH.balanceOf(alice), 1 * 1e18); // less than 1 WETH
@@ -20,13 +20,13 @@ contract SwapTest is PairTest {
         PairTest._addLiquidity(bella, 1, 2000);
 
         vm.startPrank(alice);
-        DAI.approve(address(amm), 1000 * 1e18);
-        amm.swap(address(DAI), 1000 * 1e18);
+        DAI.approve(address(pair), 1000 * 1e18);
+        pair.swap(address(DAI), 1000 * 1e18);
         vm.stopPrank();
 
         vm.startPrank(bella);
-        assertEq(amm.sharesOf(bella), 2000 * 1e36);
-        amm.removeLiquidity(2000 * 1e36);
+        assertEq(pair.sharesOf(bella), 2000 * 1e36);
+        pair.removeLiquidity(2000 * 1e36);
         vm.stopPrank();
 
         assertGt(DAI.balanceOf(bella), 2000 * 1e18);

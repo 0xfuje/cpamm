@@ -13,9 +13,10 @@ contract Factory {
 
     error NotOwner();
     error IdenticalTokenAddress();
+    error ZeroAddress();
     error PairAlreadyExists();
 
-    event CreatePair(address pair, address indexed token0, address indexed token1, uint lenght);
+    event CreatePair(address indexed token0, address indexed token1, address pair, uint lenght);
 
     constructor() {
         owner = msg.sender;
@@ -34,6 +35,9 @@ contract Factory {
         if (tokenA == tokenB) {
             revert IdenticalTokenAddress();
         }
+        if (tokenA == address(0x0) || tokenB == address(0x0)) {
+            revert ZeroAddress();
+        }
         // 1. sort order of tokens
         (address token0, address token1) = tokenA < tokenB
             ? (tokenA, tokenB)
@@ -42,16 +46,15 @@ contract Factory {
             revert PairAlreadyExists();
         }
         // 2. generate salt from hash of token0 & token1
-        bytes memory bytecode = type(Pair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
 
         // 3. create pair contract
-        new Pair{salt: salt}(address(this), token0, token1);
+        pair = address(new Pair{salt: salt}(address(this), token0, token1));
 
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair;
 
         allPairs.push(pair);
-        emit CreatePair(pair, token0, token1, allPairs.length);
+        emit CreatePair(token0, token1, pair, allPairs.length);
     }
 }

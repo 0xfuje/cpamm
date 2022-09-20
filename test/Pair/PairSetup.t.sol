@@ -2,7 +2,7 @@
 pragma solidity 0.8.13;
 
 import "forge-std/Test.sol";
-import { Pair } from "../src/Pair.sol";
+import { Pair } from "../../src/Pair.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract PairTest is Test {
@@ -25,7 +25,7 @@ contract PairTest is Test {
 
         WETH = IERC20(WETH_ADDRESS);
         DAI = IERC20(DAI_ADDRESS);
-        pair = new Pair(WETH_ADDRESS, DAI_ADDRESS);
+        pair = new Pair(address(0x0), WETH_ADDRESS, DAI_ADDRESS);
 
         deal(DAI_ADDRESS, alice, 2000 * 1e18);
         deal(WETH_ADDRESS, bella, 1 * 1e18);
