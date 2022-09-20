@@ -2,13 +2,13 @@
 pragma solidity 0.8.13;
 
 import "forge-std/Test.sol";
-import { AMMTest } from "./AMMSetup.t.sol";
+import { PairTest } from "./PairSetup.t.sol";
 
 /// @title addLiquidity and removeLiquidity tests
 
-contract LiquidityTest is AMMTest {
+contract LiquidityTest is PairTest {
     function testAddWhaleLiquidity() public {
-        AMMTest._addLiquidity(whale, 100, 200_000);
+        PairTest._addLiquidity(whale, 100, 200_000);
 
         assertEq(WETH.balanceOf(address(amm)), 100 * 1e18);
         assertEq(DAI.balanceOf(address(amm)), 200_000 * 1e18);
@@ -20,7 +20,7 @@ contract LiquidityTest is AMMTest {
     }
 
     function testAddLiquidity() public {
-        AMMTest._addLiquidity(whale, 100, 200_000);
+        PairTest._addLiquidity(whale, 100, 200_000);
 
         vm.startPrank(bella);
         WETH.approve(address(amm), 1 * 1e18);
@@ -37,8 +37,8 @@ contract LiquidityTest is AMMTest {
     }
 
     function testRemoveLiquidity() public {
-        AMMTest._addLiquidity(whale, 100, 200_000);
-        AMMTest._addLiquidity(bella, 1, 2000);
+        PairTest._addLiquidity(whale, 100, 200_000);
+        PairTest._addLiquidity(bella, 1, 2000);
         
         vm.startPrank(bella);
         amm.removeLiquidity(200_000 * 1e36);

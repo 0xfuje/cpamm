@@ -2,11 +2,11 @@
 pragma solidity 0.8.13;
 
 import "forge-std/Test.sol";
-import { AMMTest } from "./AMMSetup.t.sol";
+import { PairTest } from "./PairSetup.t.sol";
 
-contract SwapTest is AMMTest {
+contract SwapTest is PairTest {
     function testSwap() public {
-        AMMTest._addLiquidity(whale, 100, 200_000);
+        PairTest._addLiquidity(whale, 100, 200_000);
 
         vm.startPrank(alice);
         DAI.approve(address(amm), 2000 * 1e18);
@@ -17,7 +17,7 @@ contract SwapTest is AMMTest {
     }
 
     function testImpermanentLoss() public {
-        AMMTest._addLiquidity(bella, 1, 2000);
+        PairTest._addLiquidity(bella, 1, 2000);
 
         vm.startPrank(alice);
         DAI.approve(address(amm), 1000 * 1e18);

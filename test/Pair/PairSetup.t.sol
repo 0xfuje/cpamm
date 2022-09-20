@@ -2,11 +2,11 @@
 pragma solidity 0.8.13;
 
 import "forge-std/Test.sol";
-import { AMM } from "../src/AMM.sol";
+import { Pair } from "../src/Pair.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract AMMTest is Test {
-    AMM public amm;
+contract PairTest is Test {
+    Pair public pair;
     uint256 mainnetFork;
     string mainnetUrl;
 
@@ -25,7 +25,7 @@ contract AMMTest is Test {
 
         WETH = IERC20(WETH_ADDRESS);
         DAI = IERC20(DAI_ADDRESS);
-        amm = new AMM(WETH_ADDRESS, DAI_ADDRESS);
+        pair = new Pair(WETH_ADDRESS, DAI_ADDRESS);
 
         deal(DAI_ADDRESS, alice, 2000 * 1e18);
         deal(WETH_ADDRESS, bella, 1 * 1e18);
@@ -40,9 +40,9 @@ contract AMMTest is Test {
         uint256 dai_amount
     ) internal {
         vm.startPrank(depositor);
-        WETH.approve(address(amm), weth_amount * 1e18);
-        DAI.approve(address(amm), dai_amount * 1e18);
-        amm.addLiquidity(
+        WETH.approve(address(pair), weth_amount * 1e18);
+        DAI.approve(address(pair), dai_amount * 1e18);
+        pair.addLiquidity(
             weth_amount * 1e18,
             dai_amount * 1e18
         );
