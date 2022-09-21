@@ -14,6 +14,11 @@ contract SwapTest is PairTest {
 
         assertGt(WETH.balanceOf(alice), 9 * 1e17); // greater than 0.9 WETH
         assertLt(WETH.balanceOf(alice), 1 * 1e18); // less than 1 WETH
+        emit log_uint(WETH.balanceOf(alice));
+
+        assertGt(DAI.balanceOf(factory.feeAddress()), 2 * 1e18);
+        assertLt(DAI.balanceOf(factory.feeAddress()), 3 * 1e18);
+        emit log_uint(DAI.balanceOf(factory.feeAddress()));
     }
 
     function testImpermanentLoss() public {

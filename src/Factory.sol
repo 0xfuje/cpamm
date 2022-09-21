@@ -15,7 +15,8 @@ contract Factory {
     error IdenticalTokenAddress();
     error ZeroAddress();
     error PairAlreadyExists();
-
+    error NoFeeAddress();
+    
     event CreatePair(address indexed token0, address indexed token1, address pair, uint lenght);
 
     constructor() {
@@ -49,7 +50,10 @@ contract Factory {
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
 
         // 3. create pair contract
-        pair = address(new Pair{salt: salt}(address(this), token0, token1));
+        if (feeAddress == address(0x0)) {
+            revert NoFeeAddress();
+        }
+        pair = address(new Pair{salt: salt}(feeAddress, token0, token1));
 
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair;

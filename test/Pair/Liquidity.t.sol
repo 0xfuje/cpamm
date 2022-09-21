@@ -47,4 +47,16 @@ contract LiquidityTest is PairTest {
         assertEq(WETH.balanceOf(bella), 1 * 1e18);
         assertEq(DAI.balanceOf(bella), 2000 * 1e18);
     }
+
+    /* function testAddUnbalancedLiquidity() public {
+        PairTest._addLiquidity(whale, 100, 200_000);
+
+        vm.startPrank(bella);
+        WETH.approve(address(pair), 1 * 1e18);
+        DAI.approve(address(pair), 200 * 1e18);
+        pair.addLiquidity(
+            1 * 1e18,
+            200 * 1e18
+        );
+    } */
 }
